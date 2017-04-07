@@ -50,9 +50,7 @@ public class RankList : MonoBehaviour {
 		Debug.Log ("show rank list: " + stage);
 		//JsonData jd = LoadJson.LoadSavedUserInfo ();
 		var contentAdd = GetComponent<ScrollRect> ().content;
-		contentAdd.GetComponent<GridLayoutGroup> ().cellSize = new Vector2 (Screen.width / 750.0f * 650.0f, Screen.height / 1334.0f * 100.0f);
-		contentAdd.transform.DetachChildren ();
-		Debug.Log (stage);
+//		contentAdd.GetComponent<GridLayoutGroup> ().cellSize = new Vector2 (Screen.width / 750.0f * 650.0f, Screen.height / 1334.0f * 100.0f);
 		var list = _rankData ["data"][string.Format("stage_{0}",stage)];
 //		Debug.Log (_rankData ["data"] [string.Format ("stage_{0}", stage)].IsArray);
 //		return;
@@ -65,7 +63,14 @@ public class RankList : MonoBehaviour {
 				_userInfo._numindex.text = i.ToString ();
 				_userInfo._score.text = TimeCount.stringCut(((int)(list [i - 1] [1]) / 1000.0f).ToString()) + "s";
 			}
-			var singleRankItem = Instantiate (_rankItemPrefab);
+			bool addNew = false;
+			GameObject singleRankItem = null;
+			if (contentAdd.childCount == 100) {
+				singleRankItem = contentAdd.GetChild (i - 1).gameObject;
+			} else {
+				addNew = true;
+				singleRankItem = Instantiate (_rankItemPrefab);
+			}
 			var texts = singleRankItem.GetComponent<RankItemScript> ();
 			texts._numindex.text = i.ToString ();
 			texts._name.text = list [i - 1] [0].ToString();
@@ -74,9 +79,9 @@ public class RankList : MonoBehaviour {
 //			texts._score.text = list [i - 1] ["score"].ToString();
 			//singleRankItem.GetComponent<RectTransform>().sizeDelta = new Vector2 (Screen.width / 750.0f, Screen.height / 1334.0f);
 			//Debug.Log (singleRankItem.GetComponent<RectTransform> ().sizeDelta.x + " , " + singleRankItem.GetComponent<RectTransform> ().sizeDelta.y);
-			singleRankItem.transform.SetParent (contentAdd.transform,false);
-
-
+			if (addNew) {
+				singleRankItem.transform.SetParent (contentAdd.transform, false);
+			}
 		}
 	}
 }

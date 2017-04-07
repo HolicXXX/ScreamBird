@@ -7,7 +7,7 @@ public class DeviceID{
     private static extern string GetIphoneADID();
 
     public static string Get() {
-		#if UNITY_ANDROID
+		#if UNITY_ANDROID || UNITY_EDITOR
 //        AndroidJavaClass unityA = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 //        AndroidJavaObject curA = unityA.GetStatic<AndroidJavaObject>("currentActivity");
 //        AndroidJavaClass AndroidID = new AndroidJavaClass("com.yang.GetAID.AndroidID");

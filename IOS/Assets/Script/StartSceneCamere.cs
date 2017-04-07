@@ -93,7 +93,7 @@ public class StartSceneCamere : MonoBehaviour {
 			PlayerPrefs.SetString ("PlayerName", jsdArray ["data"]["nickname"].ToString());
 			try
 			{
-				PlayerPrefs.SetInt ("Money", int.Parse(jsdArray ["data"] ["money"].ToString()));
+				PlayerPrefs.SetInt ("Money", int.Parse(jsdArray ["data"] ["money"].ToString().Length == 0 ? "0" : jsdArray ["data"] ["money"].ToString()));
 			}
 			catch(KeyNotFoundException ex){
 				PlayerPrefs.SetInt ("Money", 0);
