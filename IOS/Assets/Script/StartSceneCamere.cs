@@ -19,8 +19,18 @@ public class StartSceneCamere : MonoBehaviour {
 
 	private ShareSDK ssdk;
 
+	public GameObject _helpMask;
+
+	public RawImage _networkMask;
+
+	public RawImage _loadDataMask;
+
 	void Awake(){
+		Debug.Log ("StartSceneCamera");
+		Messenger<JsonData>.AddListener (GameEvent.GET_USER_INFO, OnGetUserInfoCallBack);
+
 		if (!PlayerPrefs.HasKey ("PlayerName") || PlayerPrefs.GetString ("PlayerName") == "Name") {
+
 			PlayerPrefs.SetString ("PlayerName", "Name");
 			PlayerPrefs.SetInt ("Money", 0);
 			PlayerPrefs.SetInt ("TodayGainMoney", 0);
@@ -42,18 +52,27 @@ public class StartSceneCamere : MonoBehaviour {
 			PlayerPrefs.SetInt ("SkinPrice_1", 999);
 			PlayerPrefs.SetInt ("SkinPrice_2", 999);
 			PlayerPrefs.SetInt ("SkinPrice_3", 999);
+
+			_helpMask.SetActive (true);
+
+			if (Application.internetReachability == NetworkReachability.NotReachable) {
+				_networkMask.gameObject.SetActive (true);
+			}
 		}
-		Messenger<JsonData>.AddListener (GameEvent.GET_USER_INFO, OnGetUserInfoCallBack);
+	}
 
-		Debug.Log (AdsManager.Instance.name);
-
-		if (DataManager._isFirstEnterStartScene) {
-			DataManager._isFirstEnterStartScene = false;
-			DataManager._deathCount = 0;
+	public void OnRetryNetworkCallBack(){
+		if (Application.internetReachability != NetworkReachability.NotReachable) {
+			GetComponent<PlayerManager> ().StageInfo ();
+			GetComponent<PlayerManager> ().GetUserInfo ();
+			GetComponent<PlayerManager> ().ShopList ();
 		}
 	}
 
 	void OnGetUserInfoCallBack(JsonData jsdArray){
+		if (_networkMask.gameObject.activeInHierarchy) {
+			_networkMask.gameObject.SetActive (false);
+		}
 		Debug.Log ("get user info call back");
 		setUserinfo (jsdArray);
 		Debug.Log (JsonMapper.ToJson (jsdArray));
@@ -133,6 +152,12 @@ public class StartSceneCamere : MonoBehaviour {
 		ssdk.getFriendsHandler = OnGetFriendsResultHandler;
 		ssdk.followFriendHandler = OnFollowFriendResultHandler;
 
+		if (DataManager._isFirstEnterStartScene) {
+			DataManager._isFirstEnterStartScene = false;
+			DataManager._deathCount = 0;
+			GetComponent<PlayerManager> ().StageInfo ();
+		}
+
 		Debug.Log ("get user info");
 		GetComponent<PlayerManager> ().GetUserInfo ();
 		GetComponent<PlayerManager> ().ShopList ();
@@ -168,7 +193,7 @@ public class StartSceneCamere : MonoBehaviour {
 		}
 		else if (state == ResponseState.Cancel) 
 		{
-			print ("cancel !");
+			print ("cancel!");
 		}
 	}
 

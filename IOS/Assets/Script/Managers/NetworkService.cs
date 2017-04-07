@@ -5,6 +5,8 @@ using LitJson;
 
 public class NetworkService {
 
+	private const string StageInfoUrl = "https://api.shaojishiduo.com/cfg/scream/stage.json";
+
 	private const string MsgUrl = "https://api.shaojishiduo.com/GameScream/";
 
 	public static string MsgGetUserInfo = "getUserInfo";
@@ -58,6 +60,17 @@ public class NetworkService {
 		if (!IsResponseValid(www))
 			yield break;
 		
+		Debug.Log ("WWW: " + www.text);
+		JsonData jsdArray = JsonMapper.ToObject(www.text);
+		callback (jsdArray);
+	}
+
+	public IEnumerator ReqStageInfo(Action<JsonData> callback){
+		WWW www = new WWW(StageInfoUrl);
+		yield return www;
+
+		if (!IsResponseValid(www))
+			yield break;
 
 		Debug.Log ("WWW: " + www.text);
 		JsonData jsdArray = JsonMapper.ToObject(www.text);

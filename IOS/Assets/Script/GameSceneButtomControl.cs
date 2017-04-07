@@ -21,7 +21,7 @@ public class GameSceneButtomControl : MonoBehaviour {
 
 	public PauseControl _Player;
 
-	public Image _pauseImage;
+	public GameObject _pauseImage;
 
 	public GameSceneButtomControl _resumeButton;
 
@@ -118,13 +118,13 @@ DataManager._isRec = false;
 					#endif
 					DataManager._isRec = false;
 				}
-				SceneManager.LoadScene ("StartScene");
+				SceneManager.LoadScene ("GameScene_1");
 			}
 			break;
 		case GameSceneButtonType.B_NEXT:
 			{
 				Debug.Log ("Call next stage");
-				if (DataManager._currentStage >= 3) {
+				if (DataManager._currentStage >= DataManager._stageMaxNum) {
 					SceneManager.LoadScene ("StartScene");
 				} else {
 					DataManager._currentStage += 1;

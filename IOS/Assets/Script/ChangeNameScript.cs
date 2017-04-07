@@ -18,6 +18,7 @@ public class ChangeNameScript : MonoBehaviour {
 	void Start () {
 		GetComponent<InputField> ().placeholder.GetComponent<Text> ().text = _namelabel.text;
 		Messenger<JsonData>.AddListener (GameEvent.UPDATE_NICK_NAME, OnEndChangeNameInput);
+		_tip.GetComponent<TipCloseScript> ()._tipText.text = DataManager._languageIndex == 1 ? "改名提示" : "Tips";
 	}
 	
 	// Update is called once per frame
@@ -40,9 +41,9 @@ public class ChangeNameScript : MonoBehaviour {
 			Debug.Log ("msg: " + response ["msg"].ToString ());
 			if (_tip != null) {
 				if ((int)(response ["error"]) == 5) {
-					_tip.GetComponent<TipCloseScript> ()._tipText.text = "只能修改一次昵称哦~";
+					_tip.GetComponent<TipCloseScript> ()._tipText.text = DataManager._languageIndex == 1 ? "只能修改一次昵称哦~" : "Can only change once!";
 				} else {
-					_tip.GetComponent<TipCloseScript> ()._tipText.text = "昵称重复，请重新输入！";
+					_tip.GetComponent<TipCloseScript> ()._tipText.text = DataManager._languageIndex == 1 ? "昵称重复，请重新输入！" : "Name already exists!";
 				}
 				_tip.GetComponent<TipCloseScript> ()._closeMask = false;
 				_tip.gameObject.SetActive (true);
@@ -55,7 +56,7 @@ public class ChangeNameScript : MonoBehaviour {
 //			LoadJson.SaveUserInfo (jd);
 			PlayerPrefs.SetString("PlayerName",gameObject.GetComponent<InputField> ().textComponent.text);
 			if (_tip != null) {
-				_tip.GetComponent<TipCloseScript> ()._tipText.text = "昵称修改成功！";
+				_tip.GetComponent<TipCloseScript> ()._tipText.text = DataManager._languageIndex == 1 ? "昵称修改成功！" : "Update Name!";
 				_tip.GetComponent<TipCloseScript> ()._closeMask = true;
 				_tip.gameObject.SetActive (true);
 			}

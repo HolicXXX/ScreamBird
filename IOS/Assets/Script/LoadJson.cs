@@ -97,12 +97,24 @@ public class LoadJson : MonoBehaviour {
 		fs.Close ();
 	}
 
-	public static List<BlockBase> LoadJsonByName(string fileName){
-		currentJsonFileName = fileName;
-		TextAsset jsonfile = Resources.Load ("stage") as TextAsset;
-		string _data = jsonfile.text;
-		currentJsonString = _data;
-		JsonData jdata = JsonMapper.ToObject (_data);
+	public static bool IsStageInfoFileExists(){
+		return File.Exists (Application.persistentDataPath + "/StageInfo.json");
+	}
+
+	public static List<BlockBase> LoadJsonByName(JsonData jdata){
+		if (jdata == null) {
+			string originPath = Application.persistentDataPath + "/StageInfo.json";
+			FileStream fs = new FileStream (originPath, FileMode.Open);
+			StreamReader sr = new StreamReader (fs);
+			string data = sr.ReadToEnd ();
+			jdata = JsonMapper.ToObject (data);
+			fs.Close ();
+		}
+//		currentJsonFileName = fileName;
+//		TextAsset jsonfile = Resources.Load ("stage") as TextAsset;
+//		string _data = jsonfile.text;
+//		currentJsonString = _data;
+//		JsonData jdata = JsonMapper.ToObject (_data);
 		if (jdata.IsArray) {
 			List<BlockBase> ret = new List<BlockBase>();
 			var list = jdata;
@@ -137,8 +149,30 @@ public class LoadJson : MonoBehaviour {
 		return null;
 	}
 
-	//public static 
+	private static JsonData _languageJson = null;
 
+	public static string GetLanguageText(string keyName){
+		if (LoadJson._languageJson == null) {
+			LoadJson.LoadLanguageJson ();
+		}
+		string result = "";
+		int index = -1;
+		DataManager._nameIndex.TryGetValue (keyName, out index);
+		if (index == -1) {
+			Debug.Log ("No value at key: " + keyName);
+			return "";
+		}
+		result = _languageJson [index] [DataManager._languageIndex].ToString ();
+		return result;
+	}
+
+	private static void LoadLanguageJson(){
+		TextAsset jsonfile = Resources.Load ("LanguageText") as TextAsset;
+		string _data = jsonfile.text;
+		_languageJson = JsonMapper.ToObject (_data);
+	}
+
+	//public static 
 	static int toInt(string str){
 		return Int32.Parse (str);
 	}

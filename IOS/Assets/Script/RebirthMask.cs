@@ -15,7 +15,8 @@ public class RebirthMask : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		_moneyNum.text = string.Format ("（拥有金币：{0}个）", PlayerPrefs.GetInt ("Money"));
+		_moneyNum.text = DataManager._languageIndex == 1 ? string.Format ("（拥有金币：{0}）", PlayerPrefs.GetInt ("Money")) : string.Format (" You have: {0} ", PlayerPrefs.GetInt ("Money"));
+
 	}
 	
 	// Update is called once per frame

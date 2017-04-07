@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Xml;
+using System.IO;
 using LitJson;
 
 public class PlayerManager : MonoBehaviour, IGameManager {
@@ -26,8 +27,11 @@ public class PlayerManager : MonoBehaviour, IGameManager {
 		Debug.Log("OnGetUserInfoResponse: " + res);
 		//PlayerPrefs.SetString("PlayerName",(string)res ["nickname"]);
 		//DataManager.NickName = (string)res ["nickname"];
-		Messenger<JsonData>.Broadcast(GameEvent.GET_USER_INFO,res);
-		Debug.Log (res.ToJson ());
+		try{
+			Messenger<JsonData>.Broadcast(GameEvent.GET_USER_INFO,res);
+		}catch(MessengerInternal.BroadcastException ex){
+			Debug.Log (ex.Message);
+		}
 	}
 
 	public void UpdateScore(string stage,string time) {
@@ -120,4 +124,28 @@ public class PlayerManager : MonoBehaviour, IGameManager {
 			}
 		}
 	}
+
+	public void StageInfo(){
+		StartCoroutine (_network.ReqStageInfo (OnStageInfo));
+	}
+
+	private void OnStageInfo(JsonData res){
+		Debug.Log ("OnStageInfo: " + res);
+		if (res.IsArray) {
+			DataManager._stageInfo = res;
+			DataManager._stageMaxNum = int.Parse (res [res.Count - 1] ["stage"].ToString ());	
+		}
+
+		string filePath = Application.persistentDataPath + "/StageInfo.json";
+		if (File.Exists (filePath)) {
+			File.Delete(filePath);
+		}
+		FileStream fs = new FileStream (filePath, FileMode.Create);
+		byte[] bts = System.Text.Encoding.UTF8.GetBytes (JsonMapper.ToJson (res));
+		fs.Write (bts, 0, bts.Length);
+		fs.Close ();
+
+		Messenger.Broadcast (GameEvent.STAGE_INFO);
+	}
+
 }

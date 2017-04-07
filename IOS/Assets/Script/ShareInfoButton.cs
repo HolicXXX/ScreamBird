@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using cn.sharesdk.unity3d;
 
 public enum ShareInfoButtonType{
@@ -32,8 +33,9 @@ public class ShareInfoButton : MonoBehaviour {
 				GameObject canvas = GameObject.Find ("Canvas");
 				GameObject tip = GameObject.Instantiate (_copyTipPrefab, new Vector3 (Screen.width / 2, Screen.height / 2, 0.0f), Quaternion.identity);
 				tip.transform.SetParent (canvas.transform);
+				tip.GetComponentInChildren<Text> ().text = LoadJson.GetLanguageText ("CopyTips");
 				//tip.transform.position = new Vector3 (0, 0, 0);
-				ClipboardManager.CopyToClipboard ("尖叫鸟！这游戏有毒，我已中毒至深，尖叫根本停不下来！你也来试试吧！" + shareUrl);
+				ClipboardManager.CopyToClipboard (LoadJson.GetLanguageText ("CopyLinkText") + shareUrl);
 			}
 			break;
 		case ShareInfoButtonType.SIB_SHARELINK:
@@ -75,7 +77,7 @@ public class ShareInfoButton : MonoBehaviour {
 
 				//fbfb
 				ShareContent sFacebook = new ShareContent();
-				sFacebook.SetText(shareTitleEn);
+				sFacebook.SetText(shareTitleEn + " Download：" + shareUrl);
 				sFacebook.SetTitle(shareDescEn);
 				sFacebook.SetImageUrl(shareImg);
 				sFacebook.SetShareType(ContentType.Webpage);

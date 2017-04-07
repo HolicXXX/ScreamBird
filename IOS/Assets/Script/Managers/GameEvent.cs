@@ -12,4 +12,6 @@
 
 	public const string CHANGE_SKIN = "CHANGE_SKIN";
 	public const string BUY_SKIN = "BUY_SKIN";
+
+	public const string STAGE_INFO = "STAGE_INFO";
 }

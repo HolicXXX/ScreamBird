@@ -16,18 +16,23 @@ public class AddBlock : MonoBehaviour {
 
 	public Camera mainCamera;
 
-	public GameObject _playerTips;
+	public GameObject _playerTips1;
+	public GameObject _playerTips2;
 
 	// Use this for initialization
 	void Start () {
-		List<BlockBase> list = LoadJson.LoadJsonByName ("stage");
+		List<BlockBase> list = LoadJson.LoadJsonByName (DataManager._stageInfo);
 		//Debug.Log (list.Count);
 		foreach (BlockBase b in list) {
 			addBlockWithData (b);
 			//Debug.Log (b._id.ToString() + " " + b._type.ToString() + " " + b._startX.ToString() + " " + b._endX.ToString() + " " + b._Y.ToString());
 		}
 		if (DataManager._currentStage != 1) {
-			_playerTips.SetActive (false);
+			_playerTips1.SetActive (false);
+			_playerTips2.SetActive (false);
+		} else {
+			_playerTips1.GetComponent<TextMesh>().text = LoadJson.GetLanguageText (_playerTips1.name);
+			_playerTips2.GetComponent<TextMesh>().text = LoadJson.GetLanguageText (_playerTips2.name);
 		}
 
 	}

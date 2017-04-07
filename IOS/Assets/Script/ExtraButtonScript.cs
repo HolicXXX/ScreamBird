@@ -44,6 +44,12 @@ public class ExtraButtonScript : MonoBehaviour {
 //				GetComponent<Image> ().sprite = _musicOff;
 //			}
 //		}
+		if(_extraButtonType == ExtraButtonType.EBT_WX){
+			if (DataManager._languageIndex == 2) {
+				gameObject.SetActive (false);
+			}
+		}
+
 		if(_extraButtonType == ExtraButtonType.EBT_REBIRTH){
 			Messenger<JsonData>.AddListener (GameEvent.COIN_UPDATED, OnConsumeMoneyCallBack);
 		}
@@ -84,7 +90,8 @@ public class ExtraButtonScript : MonoBehaviour {
 				Debug.Log ("call like api");
 				Hashtable userData = new Hashtable();
 				//ShareREC.editLastingRecording ("我天籁般的的叫声，是时候让你们听到了！", userData, null);
-				ShareREC.openSocial ("我天籁般的的叫声，是时候让你们听到了！", userData, SocialPageType.Share, null);
+				string str = DataManager._languageIndex == 1?"我天籁般的的叫声，是时候让你们听到了！":"My scream is like the sounds of nature. It's time to show you.";
+				ShareREC.openSocial (str, userData, SocialPageType.Share, null);
 			}
 			break;
 		case ExtraButtonType.EBT_MUSIC:
@@ -115,7 +122,8 @@ public class ExtraButtonScript : MonoBehaviour {
 			{
 				Debug.Log ("call share api");
 				Hashtable userData = new Hashtable();
-				ShareREC.openSocial ("我天籁般的的叫声，是时候让你们听到了！", userData, SocialPageType.Share, null);
+				string str = DataManager._languageIndex == 1?"我天籁般的的叫声，是时候让你们听到了！":"My scream is like the sounds of nature. It's time to show you.";
+				ShareREC.openSocial (str, userData, SocialPageType.Share, null);
 			}
 			break;
 		case ExtraButtonType.EBT_WX:
@@ -166,7 +174,7 @@ public class ExtraButtonScript : MonoBehaviour {
 
 				//fbfb
 				ShareContent sFacebook = new ShareContent();
-				sFacebook.SetText(shareTitleEn);
+				sFacebook.SetText(shareTitleEn + " Download: " + shareUrl);
 				sFacebook.SetTitle(shareDescEn);
 				sFacebook.SetImageUrl(shareImg);
 				sFacebook.SetShareType(ContentType.Webpage);
@@ -174,7 +182,7 @@ public class ExtraButtonScript : MonoBehaviour {
 
 				//Twitter
 				ShareContent sTwitter = new ShareContent();
-				sTwitter.SetText(shareDescEn + " Download：" + shareUrl);
+				sTwitter.SetText(shareDescEn + " Download: " + shareUrl);
 				sTwitter.SetImageUrl(shareImg);
 				sTwitter.SetUrl(shareUrl);
 				sTwitter.SetShareType(ContentType.Auto);

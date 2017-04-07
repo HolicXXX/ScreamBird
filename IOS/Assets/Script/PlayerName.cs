@@ -10,7 +10,6 @@ public class PlayerName : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Debug.Log ("at start");
 		OnUpdataUserInfoCallBack ();
 		Messenger.AddListener (GameEvent.UPDATA_USER_INFO,OnUpdataUserInfoCallBack);
 		//Messenger<JsonData>.AddListener (GameEvent.UPDATE_NICK_NAME, OnUpdataNickNameCallBack);

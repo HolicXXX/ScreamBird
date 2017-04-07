@@ -42,8 +42,11 @@ public class CameraMove : MonoBehaviour {
 		DataManager._waitOperate = false;
 
 		//if((int)(LoadJson.LoadSavedUserInfo()["Music"]) == 1)
-		if(PlayerPrefs.GetInt("Music") == 1)
-			GetComponent<AudioSource> ().Play ();
+		if (PlayerPrefs.GetInt ("Music") == 1) {
+			var audio = GetComponent<AudioSource> ();
+			audio.volume = 0.5f;
+			audio.Play ();
+		}
 
 		Messenger<JsonData>.AddListener (GameEvent.UPDATA_SCORE, OnUpdataScoreCallBack);
 
@@ -107,13 +110,13 @@ public class CameraMove : MonoBehaviour {
 				}
 				GetComponent<AudioSource> ().Stop ();
 				//Debug.Log (DataManager._currentStage + " " + PlayerPrefs.GetInt ("PassedStageNum"));
-				if (DataManager._currentStage != 3 && DataManager._currentStage > PlayerPrefs.GetInt ("PassedStageNum")) {//PlayerPrefs.GetInt("PassedStageNum")
+				if (DataManager._currentStage > PlayerPrefs.GetInt ("PassedStageNum")) {//PlayerPrefs.GetInt("PassedStageNum")
 					//Debug.Log (DataManager._currentStage + " " + PlayerPrefs.GetInt ("PassedStageNum"));
 					PlayerPrefs.SetInt ("PassedStageNum", PlayerPrefs.GetInt ("PassedStageNum") + 1);
 					//jd ["PassedStageNum"] = new JsonData ((int)(jd ["PassedStageNum"]) + 1);
 					DataManager._passedNum += 1;
-					if (DataManager._passedNum > 3)
-						DataManager._passedNum = 3;
+					if (DataManager._passedNum > DataManager._stageMaxNum)
+						DataManager._passedNum = DataManager._stageMaxNum;
 				}
 			}
 			_iscalled = true;
@@ -144,10 +147,6 @@ public class CameraMove : MonoBehaviour {
 		if (_player.transform.position.y - transform.position.y < -Screen.height / 200.0f && !DataManager._isFailed) {
 			Debug.Log ("out of sight");
 			_player.GetComponent<PlayerController> ().SetDead ();
-//			_player.GetComponent<Rigidbody2D> ().velocity = Vector3.zero;
-//			_player.GetComponent<Rigidbody2D> ().isKinematic = true;
-//			_player.GetComponent<Collider2D> ().enabled = false;
-//			DataManager._isFailed = true;
 		}
 	}
 
@@ -155,9 +154,14 @@ public class CameraMove : MonoBehaviour {
 		//add to _backGroundOrigin	
 		GameObject bg = GameObject.Instantiate(_backGroundPrefab);
 		bg.GetComponent<BackGroundMover> ()._mainCamera = gameObject;
-		bg.transform.parent = _backGroundOrigin.transform;
-		bg.transform.position = new Vector2 (lastX + bg.GetComponent<BackGroundMover> ()._Width / 100.0f,transform.position.y);
-		//bg.transform.localScale = new Vector3 (1.0f, Screen.height / 1334.0f, 1.0f);
+		bg.transform.SetParent (_backGroundOrigin.transform, false);
+//		Debug.Log(bg.gameObject.GetComponent<SpriteRenderer>().sprite.texture.height);
+//		float scaleHeight = Screen.height > 1334.0f ? Screen.height / 1334.0f : 1334.0f / Screen.height;
+//		Debug.Log ("ScaleHeight: " + scaleHeight);
+//		bg.transform.localScale = new Vector3 (1.0f, scaleHeight, 1.0f);
+//		Debug.Log (bg.transform.localScale);
+		bg.transform.localPosition = new Vector2 (lastX + bg.GetComponent<BackGroundMover> ()._Width / 100.0f,transform.position.y);
+
 	}
 
 	public void RebirthPlayer(){

@@ -61,7 +61,8 @@ public class SkinItemState : MonoBehaviour {
 					Debug.Log ("Buy Skin");
 
 					_buyConfirmMask.gameObject.SetActive (true);
-					_buyTipInfo.text = string.Format ("确定消耗\n{0}金币\n购买皮肤？", _skinMoneyNum);
+					string tiptext = DataManager._languageIndex == 1 ? string.Format ("确定消耗\n{0}金币\n购买皮肤？", _skinMoneyNum) : string.Format("Cost\n{0}coins\nto buy skin?",_skinMoneyNum);
+					_buyTipInfo.text = tiptext;
 
 					var buttons = _buyConfirmMask.GetComponentsInChildren<Button> ();
 					buttons [0].onClick.RemoveAllListeners ();
@@ -77,7 +78,7 @@ public class SkinItemState : MonoBehaviour {
 					var rect = tip.transform as RectTransform;
 					rect.anchoredPosition = new Vector2 (0, 0);
 					rect.sizeDelta = new Vector2 (Screen.width, Screen.height);
-					tip.GetComponentInChildren<Text> ().text = "金币不足！";
+					tip.GetComponentInChildren<Text> ().text = DataManager._languageIndex == 1 ? "金币不足！" : "Not Enough Money";
 				}
 			}
 			break;

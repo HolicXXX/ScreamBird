@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ShareMoneyCount : MonoBehaviour {
 
@@ -18,7 +19,8 @@ public class ShareMoneyCount : MonoBehaviour {
 	}
 
 	void OnEnable(){
-		_manager.GetUserInfo ();
+		if(SceneManager.GetActiveScene().name == "StartScene")
+			_manager.GetUserInfo ();
 	}
 
 	void OnDestroy(){

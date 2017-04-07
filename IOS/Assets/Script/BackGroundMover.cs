@@ -12,7 +12,6 @@ public class BackGroundMover : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		transform.localScale = new Vector3 (1.0f, Screen.height / 1334.0f, 1.0f);
 		_callNext = true;
 		//_mainCamera.transform.position = new Vector2 (_mainCamera.transform.position.x + _Width, _mainCamera.transform.position.y);
 	}

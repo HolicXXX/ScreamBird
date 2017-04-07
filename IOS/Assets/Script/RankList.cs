@@ -21,7 +21,6 @@ public class RankList : MonoBehaviour {
 	}
 
 	void OnEnable() {
-
 		if (DataManager._needUpdateRank) {
 			//UpdateRankList ();
 			_manager.GetRankList();
@@ -57,7 +56,7 @@ public class RankList : MonoBehaviour {
 		var list = _rankData ["data"][string.Format("stage_{0}",stage)];
 //		Debug.Log (_rankData ["data"] [string.Format ("stage_{0}", stage)].IsArray);
 //		return;
-		_userInfo._numindex.text = "未上榜";
+		_userInfo._numindex.text = DataManager._languageIndex == 1 ? "未上榜" : "None";
 		_userInfo._name.text = PlayerPrefs.GetString ("PlayerName");//jd ["PlayerName"].ToString ();
 		string defaultScore = TimeCount.stringCut ((PlayerPrefs.GetFloat (string.Format ("Stage_{0}", stage)) / 1000.0f).ToString () + "s");//((int)(jd[string.Format ("Stage_{0}", stage)]) / 1000.0f).ToString())
 		_userInfo._score.text = defaultScore.Length == 1 ? "0.000s" : defaultScore;
@@ -75,7 +74,7 @@ public class RankList : MonoBehaviour {
 //			texts._score.text = list [i - 1] ["score"].ToString();
 			//singleRankItem.GetComponent<RectTransform>().sizeDelta = new Vector2 (Screen.width / 750.0f, Screen.height / 1334.0f);
 			//Debug.Log (singleRankItem.GetComponent<RectTransform> ().sizeDelta.x + " , " + singleRankItem.GetComponent<RectTransform> ().sizeDelta.y);
-			singleRankItem.transform.SetParent (contentAdd.transform);
+			singleRankItem.transform.SetParent (contentAdd.transform,false);
 
 
 		}
